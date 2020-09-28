@@ -1,27 +1,18 @@
 import pandas as pd
 import numpy as np
 
-#Probobly more imports than I really need
+#This is a hodge podge of auxiliary functions for quick experimental iteration for building and testing a Kaggle time series model
+#for the M5 competition.
+
+#Many of the functions are borrowed from other people. E.g. the 'reduce_mem_usage' function I found somewhere on kaggle.com and I do not 
+#know who the original author is. The time series related functions are taken from the course https://mlcourse.ai/, from lecture on time #
+#series. 
 
 import matplotlib.pyplot as plt                  # plots
 import seaborn as sns                            # more plots
 
-from dateutil.relativedelta import relativedelta # working with dates with style
-from scipy.optimize import minimize              # for function minimization
 
-import statsmodels.formula.api as smf            # statistics and econometrics
-import statsmodels.tsa.api as smt
-import statsmodels.api as sm
-import scipy.stats as scs
 
-from itertools import product                    # some useful functions
-from tqdm import tqdm_notebook
-
-from itertools import cycle
-pd.set_option('max_columns', 50)
-plt.style.use('bmh')
-color_pal = plt.rcParams['axes.prop_cycle'].by_key()['color']
-color_cycle = cycle(plt.rcParams['axes.prop_cycle'].by_key()['color'])
 
 
 from sklearn.linear_model import LinearRegression
@@ -181,6 +172,8 @@ def plotCoefficients(model, X_train):
     plt.grid(True, axis='y')
     plt.hlines(y=0, xmin=0, xmax=len(coefs), linestyles='dashed');
     
+    
+    
 
 def plotForecastResults(forecast, actual):
     """
@@ -226,3 +219,19 @@ def plotForecastResults(forecast, actual):
     plt.legend(loc="best")
     plt.tight_layout()
     plt.grid(True);   
+    
+    
+def Get_optimal_Lasso_parameters(pilot, horizon):
+
+    '''We train model to predict horizon days into future and do time series cv to get optimal Lasso parameter'''
+
+    X_train, X_test, y_train, y_test = prepareData(pilot, test_size=(horizon/len(pilot)), target_encoding=False)
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    lasso = LassoCV(cv=tscv)
+    lasso.fit(X_train_scaled, y_train)
+  
+    
+    alpha = lasso.alpha_ 
+
+    return alpha    
