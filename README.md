@@ -2,7 +2,7 @@
 Top 13.6% solution with simple linear regression model.
 
 The idea details are in the notebook called 'beat_baseline_take1'. The goal of the competition is to predict a 28 day sales horizon
-for over 30000 individual time series corresponding to the sales of various products from various Wal-Marts in the USA. The metric for 
+for over 30000 individual time series corresponding to the sales of various products from various Walmarts in the USA. The metric for 
 evaluation is a variant of the root mean squared error (RMSE). 
 
 The strategy is as follows: We produce a time series forecast for each item, giving rise to 30000 individual forecasts. This approach avoids
